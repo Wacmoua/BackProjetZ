@@ -9,10 +9,11 @@ const authenticateUser = (req, res, next) => {
 
     // Assurez-vous que le token est précédé par "Bearer " avec l'espace
     const token = tokenHeader.replace("Bearer ", "");
-    console.log("Token received:", token);
+    
 
     try {
         const decodedToken = jwt.verify(token, 'secretkey');
+
 
         // Assurez-vous que "user" est défini dans le token
         if (!decodedToken.sub) {
@@ -21,7 +22,7 @@ const authenticateUser = (req, res, next) => {
 
         // Ajoutez un log pour afficher le userId extrait du token
         console.log("User ID from token:", decodedToken.sub);
-        console.log("Token reçu dans le middleware d'authentification:", token);
+        
 
         req.userId = decodedToken.sub;
         next();

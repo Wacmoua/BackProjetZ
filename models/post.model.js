@@ -16,7 +16,16 @@ const postSchema = mongoose.Schema(
         userId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User',
-          required: true, // Référence à votre modèle d'utilisateur si nécessaire
+          required: true, 
+        },
+      },
+    ],
+    dislikers: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true, 
         },
       },
     ],
