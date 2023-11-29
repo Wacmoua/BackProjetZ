@@ -1,11 +1,12 @@
-const path = require('path');
+
 const express = require("express");
 const session = require("express-session");
 const connectDB = require("../backend/config/db");
 const app = express();
 const postRoutes = require("./routes/post.routes");
 const authRoutes = require("./routes/auth.routes");
-const logoutRoutes = require("./routes/logout.routes");
+const commentRoutes = require('./routes/comment.routes');
+
 const bodyParser = require("body-parser");
 
 require('dotenv').config();
@@ -37,13 +38,8 @@ app.use(
 // Routes
 app.use("/auth", authRoutes);
 app.use("/post", postRoutes);
-app.use("/logout", logoutRoutes);
+app.use('/comments', commentRoutes);
 
-
-const staticFolderPath = path.resolve(__dirname, '../Front test');
-console.log("Chemin absolu du dossier statique:", staticFolderPath);
-
-app.use(express.static(staticFolderPath));
 
 
 const PORT = process.env.PORT || 5000;
