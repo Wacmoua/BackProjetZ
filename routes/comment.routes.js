@@ -1,28 +1,35 @@
-// routes/comment.js
+const express = require("express");
+const cors = require("cors");
+const { authenticateUser } = require("../middleware/authMiddleware");
+const CommentModel = require("../models/comment.model");
+const {
+  createComment,
+  getComments,
+  editComment,
+  deleteComment,
+} = require("../controllers/comment.controller");
 
-const express = require('express');
 const router = express.Router();
-const Comment = require('../models/comment.model');
 
-// Endpoint pour créer un commentaire
-router.post('/', async (req, res) => {
+router.use(cors());
+router.use(authenticateUser);
+
+router.post("/:postId/comments", createComment);
+router.get('/:postId/comments', async (req, res) => {
   try {
-    const { text, postId } = req.body;
+      const postId = req.params.postId;
 
-    // Créer un nouveau commentaire
-    const newComment = new Comment({
-      text,
-      postId,
-    });
+      // Utilisez le modèle de commentaire pour récupérer les commentaires associés à un post
+      const comments = await CommentModel.find({ post: postId });
 
-    // Sauvegarder le commentaire dans la base de données
-    const savedComment = await newComment.save();
-
-    res.status(201).json(savedComment);
+      // Renvoyez les commentaires au client
+      res.status(200).json(comments);
   } catch (error) {
-    console.error('Erreur lors de la création du commentaire :', error);
-    res.status(500).json({ error: 'Erreur serveur' });
+      console.error("Erreur lors de la récupération des commentaires :", error);
+      res.status(500).json({ message: "Erreur interne du serveur." });
   }
 });
+router.put("/:postId/comments/:commentId", editComment);
+router.delete("/:postId/comments/:commentId", deleteComment);
 
 module.exports = router;

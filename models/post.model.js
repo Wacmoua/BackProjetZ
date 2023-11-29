@@ -1,32 +1,39 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const postSchema = mongoose.Schema(
+const postSchema = new Schema(
   {
     message: {
       type: String,
       required: true,
     },
     author: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
     likers: [
       {
         userId: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Schema.Types.ObjectId,
           ref: 'User',
-          required: true, 
+          required: true,
         },
       },
     ],
     dislikers: [
       {
         userId: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Schema.Types.ObjectId,
           ref: 'User',
-          required: true, 
+          required: true,
         },
+      },
+    ],
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
       },
     ],
   },
@@ -35,5 +42,7 @@ const postSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("post", postSchema);
+module.exports = mongoose.model("Post", postSchema);
+
+
 

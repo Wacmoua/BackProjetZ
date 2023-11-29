@@ -6,7 +6,6 @@ const app = express();
 const postRoutes = require("./routes/post.routes");
 const authRoutes = require("./routes/auth.routes");
 const commentRoutes = require('./routes/comment.routes');
-
 const bodyParser = require("body-parser");
 
 require('dotenv').config();
@@ -38,7 +37,8 @@ app.use(
 // Routes
 app.use("/auth", authRoutes);
 app.use("/post", postRoutes);
-app.use('/comments', commentRoutes);
+app.use('/comment', commentRoutes);
+
 
 
 

@@ -1,7 +1,6 @@
 const jwt_decode = require('jwt-decode');
 const PostModel = require("../models/post.model");
 const UserModel = require('../models/user.model');
-
 const mongoose = require("mongoose");
 
 

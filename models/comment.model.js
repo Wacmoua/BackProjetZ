@@ -1,19 +1,21 @@
-// models/comment.js
-
 const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    required: true,
-  },
-  postId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Post', // Assurez-vous que c'est le nom de votre modèle de message
-    required: true,
-  },
-});
+    message: {
+      type: String,
+      required: true,
+    },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User', 
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  });
 
-const Comment = mongoose.model('Comment', commentSchema);
+  const comment = mongoose.model('comment', commentSchema);
 
-module.exports = Comment;
+module.exports = comment;
