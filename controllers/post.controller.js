@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 module.exports.getPosts = async (req, res) => {
   try {
-    // Récupérez les posts triés par date de création décroissante
+    // Récupére les posts triés par date de création décroissante
     const posts = await PostModel.find().sort({ createdAt: -1 }).populate('author', 'username').populate('likers.userId', 'username').populate('dislikers.userId', 'username');
 
     res.status(200).json(posts);
@@ -62,26 +62,26 @@ module.exports.editPost = async (req, res) => {
 
 module.exports.deletePost = async (req, res) => {
   try {
-    // Assurez-vous que l'utilisateur est authentifié
+    //l'utilisateur est authentifié
     if (!req.userId) {
       return res.status(401).json({ message: "Utilisateur non authentifié" });
     }
 
-    // Recherchez le post par son ID
+    // Recherche le post par son ID
     const post = await PostModel.findById(req.params.id);
 
-    // Vérifiez si le post existe
+    // Vérifie si le post existe
     if (!post) {
       return res.status(404).json({ message: "Ce post n'existe pas" });
     }
 
 
-    // Vérifiez si l'utilisateur actuel est le propriétaire du post
+    // Vérifie si l'utilisateur actuel est le propriétaire du post
     if (post.author.toString() !== req.userId.toString()) {
       return res.status(403).json({ message: "Vous n'êtes pas autorisé à supprimer ce post" });
     }
 
-    // Supprimez le post
+    // Supprime le post
     
     await post.deleteOne({ _id: req.params.id });
     
@@ -99,24 +99,24 @@ module.exports.likePost = async (req, res) => {
     const { id } = req.params;
     const userId = req.userId;
 
-    // Vérifiez si le post existe
+    // Vérifie si le post existe
     const post = await PostModel.findById(id);
     if (!post) {
       return res.status(404).json({ message: "Post non trouvé." });
     }
 
-    // Vérifiez si l'utilisateur a déjà liké le post
+    // Vérifie si l'utilisateur a déjà liké le post
     const isLiked = post.likers.some(liker => liker && liker.userId && liker.userId.equals(userId));
 
-    // Si l'utilisateur a déjà aimé le post, annulez le like
+    // Si l'utilisateur a déjà aimé le post, annule le like
     if (isLiked) {
       post.likers = post.likers.filter(liker => !liker.userId.equals(userId));
     } else {
-      // Sinon, ajoutez l'ID de l'utilisateur à la liste des likers
+      // Sinon, ajoute l'ID de l'utilisateur à la liste des likers
       post.likers.push({ userId });
     }
 
-    // Sauvegardez les modifications dans la base de données
+    // Sauvegarde les modifications dans la base de données
     await post.save();
 
     // Population des likers avec les noms d'utilisateur
@@ -138,22 +138,22 @@ module.exports.dislikePost = async (req, res) => {
     const { id } = req.params;
     const userId = req.userId;
 
-    // Vérifiez si le post existe
+    // Vérifie si le post existe
     const post = await PostModel.findById(id);
     if (!post) {
       return res.status(404).json({ message: "Post non trouvé." });
     }
 
-    // Retirez l'utilisateur de la liste des dislikers
+    // Retire l'utilisateur de la liste des dislikers
     if (post.dislikers.some(disliker => disliker && disliker.userId && disliker.userId.equals(userId))) {
-      // Annulez le dislike si l'utilisateur a déjà disliké le post
+      // Annule le dislike si l'utilisateur a déjà disliké le post
       post.dislikers = post.dislikers.filter(disliker => !disliker.userId.equals(userId));
     } else {
-      // Ajoutez l'ID de l'utilisateur à la liste des dislikers
+      // Ajoute l'ID de l'utilisateur à la liste des dislikers
       post.dislikers.push({ userId });
     }
 
-    // Sauvegardez les modifications dans la base de données
+    // Sauvegarde les modifications dans la base de données
     await post.save();
 
     // Population des dislikers avec les noms d'utilisateur

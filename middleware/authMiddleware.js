@@ -7,7 +7,7 @@ const authenticateUser = (req, res, next) => {
         return res.status(401).json({ message: "Token d'utilisateur manquant." });
     }
 
-    // Assurez-vous que le token est précédé par "Bearer " avec l'espace
+    
     const token = tokenHeader.replace("Bearer ", "");
     
 
@@ -15,12 +15,12 @@ const authenticateUser = (req, res, next) => {
         const decodedToken = jwt.verify(token, 'secretkey');
 
 
-        // Assurez-vous que "user" est défini dans le token
+        // "user" est défini dans le token
         if (!decodedToken.sub) {
             return res.status(401).json({ message: "Informations utilisateur manquantes dans le token." });
         }
 
-        // Ajoutez un log pour afficher le userId extrait du token
+        // Ajoute un log pour afficher le userId extrait du token
         console.log("User ID from token:", decodedToken.sub);
         
 
